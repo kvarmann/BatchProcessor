@@ -81,7 +81,7 @@ docker run -v $(pwd):/app batch-processor --files input1.txt input2.txt
 ```
 docker run batch-processor --input record1 record2 record3 record4
 ```
-### Example with Input from Files:
+### Example with Input from Files from Command Line:
 
 #### Create example input files
 ```
@@ -89,7 +89,7 @@ echo -e "record1\nrecord2\nrecord3" > input1.txt
 echo -e "record4\nrecord5\nrecord6" > input2.txt
 ```
 
-#### Run the Docker container with input files
+#### Run locally with input files
 ```
 python BatchProcessor.py --files input1.txt input2.txt
 ```
