@@ -30,9 +30,15 @@ The `BatchProcessor` class can be used as follows:
 from BatchProcessor import BatchProcessor
 
 if __name__ == "__main__":
-    input_records = ["record1", "record2", "record3", ..., "recordn"]
+    parser = argparse.ArgumentParser(description="Process records into batches.")
+    parser.add_argument('records', metavar='R', type=str, nargs='+', help='Records to be processed')
+
+    args = parser.parse_args()
+    input_records = args.records
+
     batch_processor = BatchProcessor()
     output_batches = batch_processor.create_batches(input_records)
+
     for i, batch in enumerate(output_batches):
         print(f"Processed Batch {i+1}: {batch}")
 ```
@@ -51,13 +57,33 @@ To build the Docker image that includes the BatchProcessor class and the associa
 ```
 docker build -t batch-processor .
 ```
-## Running Tests
-After building the Docker image, you can run the tests using pytest:
+## Run the Docker container with direct input:
 
 ```
-docker run batch-processor
+docker run batch-processor --input record1 record2 record3 record4
 ```
-This command executes pytest inside the Docker container, running all the test cases defined in test_BatchProcessor.py.
+
+## Run the Docker container with input files:
+
+```
+docker run -v $(pwd):/app batch-processor --files input1.txt input2.txt
+```
+## Example with Input from the Command Line:
+```
+docker run batch-processor --input record1 record2 record3 record4
+```
+## Example with Input from Files:
+
+### Create example input files
+```
+echo -e "record1\nrecord2\nrecord3" > input1.txt
+echo -e "record4\nrecord5\nrecord6" > input2.txt
+```
+
+### Run the Docker container with input files
+```
+docker run -v $(pwd):/app batch-processor --files input1.txt input2.txt
+```
 
 ## Test Cases
 The project includes test cases (test/test_BatchProcessor.py) to validate the functionality of the BatchProcessor class. These test cases cover scenarios such as:

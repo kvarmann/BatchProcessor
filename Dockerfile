@@ -10,6 +10,6 @@ COPY . .
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Run pytest with verbose output to execute tests
-CMD ["pytest", "-vv"]
+# Entry point to the batch processor
+ENTRYPOINT ["python", "BatchProcessor.py"]
 

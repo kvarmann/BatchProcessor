@@ -1,5 +1,5 @@
 from typing import List
-
+import argparse
 class BatchProcessor:
     def __init__(self, max_record_size: int = 1 * 1024 * 1024, max_batch_size: int = 5 * 1024 * 1024, max_records_per_batch: int = 500):
         self.max_record_size = max_record_size
@@ -44,10 +44,29 @@ class BatchProcessor:
 
         return batches
 
+def read_records_from_files(file_paths: List[str]) -> List[str]:
+    records = []
+    for file_path in file_paths:
+        with open(file_path, 'r') as file:
+            records.extend(file.read().splitlines())
+    return records
 
-# Example usage
+def read_records_from_input(inputs: List[str]) -> List[str]:
+    return inputs
+
 if __name__ == "__main__":
-    input_records = ["record1", "record2", "record3", "recordn"]
+    parser = argparse.ArgumentParser(description="Process batches of records.")
+    parser.add_argument('-f', '--files', metavar='F', type=str, nargs='*', help='input files containing records')
+    parser.add_argument('-i', '--input', metavar='I', type=str, nargs='*', help='input records provided directly')
+    args = parser.parse_args()
+
+    if args.files:
+        input_records = read_records_from_files(args.files)
+    elif args.input:
+        input_records = read_records_from_input(args.input)
+    else:
+        raise ValueError("Either --files or --input must be provided.")
+
     batch_processor = BatchProcessor()
     output_batches = batch_processor.create_batches(input_records)
     for i, batch in enumerate(output_batches):
