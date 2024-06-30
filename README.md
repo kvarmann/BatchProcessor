@@ -9,16 +9,19 @@ This project implements a `BatchProcessor` class that processes a list of record
 - Maximum size of each batch is 5 MB.
 - Maximum number of records per batch is 500.
 
+## Files
+
+- `BatchProcessor.py`: The main script for processing records.
+- `requirements.txt`: List of required Python packages.
+- `Dockerfile`: Docker configuration file.
+- `test_BatchProcessor.py`: Unit tests for the `BatchProcessor`.
+
 ## BatchProcessor Class
 
 The `BatchProcessor` class (`BatchProcessor.py`) contains the following methods:
-
-### `__init__(self, max_record_size=1048576, max_batch_size=5242880, max_records_per_batch=500)`
-
+-  `__init__(self, max_record_size=1048576, max_batch_size=5242880, max_records_per_batch=500)`
 - Initializes the processor with configurable limits for record size, batch size, and records per batch.
-
-### `create_batches(self, records: List[str]) -> List[List[str]]`
-
+-  `create_batches(self, records: List[str]) -> List[List[str]]`
 - Processes a list of records into batches based on the configured limits.
 - Returns a list of batches, where each batch is a list of records.
 
