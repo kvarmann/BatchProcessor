@@ -33,15 +33,20 @@ The `BatchProcessor` class can be used as follows:
 from BatchProcessor import BatchProcessor
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Process records into batches.")
-    parser.add_argument('records', metavar='R', type=str, nargs='+', help='Records to be processed')
-
+    parser = argparse.ArgumentParser(description="Process batches of records.")
+    parser.add_argument('-f', '--files', metavar='F', type=str, nargs='*', help='input files containing records')
+    parser.add_argument('-i', '--input', metavar='I', type=str, nargs='*', help='input records provided directly')
     args = parser.parse_args()
-    input_records = args.records
+
+    if args.files:
+        input_records = read_records_from_files(args.files)
+    elif args.input:
+        input_records = read_records_from_input(args.input)
+    else:
+        raise ValueError("Either --files or --input must be provided.")
 
     batch_processor = BatchProcessor()
     output_batches = batch_processor.create_batches(input_records)
-
     for i, batch in enumerate(output_batches):
         print(f"Processed Batch {i+1}: {batch}")
 ```
@@ -50,7 +55,7 @@ if __name__ == "__main__":
 ### Prerequisites
 Docker installed on your system.
 
-## Building the Docker Image
+### Building the Docker Image
 To build the Docker image that includes the BatchProcessor class and the associated tests:
 
 - Navigate to the project directory containing Dockerfile and requirements.txt.
@@ -60,32 +65,33 @@ To build the Docker image that includes the BatchProcessor class and the associa
 ```
 docker build -t batch-processor .
 ```
-## Run the Docker container with direct input:
+### Run the Docker container with direct input:
 
 ```
 docker run batch-processor --input record1 record2 record3 record4
 ```
 
-## Run the Docker container with input files:
+### Run the Docker container with input files:
 
 ```
 docker run -v $(pwd):/app batch-processor --files input1.txt input2.txt
 ```
-## Example with Input from the Command Line:
+## Running locally
+### Example with Input from the Command Line:
 ```
 docker run batch-processor --input record1 record2 record3 record4
 ```
-## Example with Input from Files:
+### Example with Input from Files:
 
-### Create example input files
+#### Create example input files
 ```
 echo -e "record1\nrecord2\nrecord3" > input1.txt
 echo -e "record4\nrecord5\nrecord6" > input2.txt
 ```
 
-### Run the Docker container with input files
+#### Run the Docker container with input files
 ```
-docker run -v $(pwd):/app batch-processor --files input1.txt input2.txt
+python BatchProcessor.py --files input1.txt input2.txt
 ```
 
 ## Test Cases
